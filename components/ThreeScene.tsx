@@ -38,12 +38,16 @@ const InteractiveShape: React.FC<InteractiveShapeProps> = ({ position, color, ty
   const handlePointerOver = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     setHovered(true);
-    document.body.style.cursor = 'pointer';
+    if (typeof document !== 'undefined') {
+      document.body.style.cursor = 'pointer';
+    }
   };
 
   const handlePointerOut = () => {
     setHovered(false);
-    document.body.style.cursor = 'default';
+    if (typeof document !== 'undefined') {
+      document.body.style.cursor = 'default';
+    }
   };
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
@@ -61,8 +65,8 @@ const InteractiveShape: React.FC<InteractiveShapeProps> = ({ position, color, ty
     >
       {type === 'sphere' && (
         <Sphere 
-          ref={meshRef as any}
-          args={[1, 128, 128]} 
+          ref={meshRef}
+          args={[1, 64, 64]} 
           position={position}
           scale={targetScale}
           onPointerOver={handlePointerOver}
@@ -76,7 +80,7 @@ const InteractiveShape: React.FC<InteractiveShapeProps> = ({ position, color, ty
             radius={1}
             roughness={0.1}
             metalness={1}
-            emissive={active ? '#7c3aed' : '#000000'}
+            emissive={new THREE.Color(active ? '#7c3aed' : '#000000')}
             emissiveIntensity={active ? 0.5 : 0}
           />
         </Sphere>
@@ -84,8 +88,8 @@ const InteractiveShape: React.FC<InteractiveShapeProps> = ({ position, color, ty
 
       {type === 'torus' && (
         <Torus 
-          ref={meshRef as any}
-          args={[0.6, 0.18, 16, 100]} 
+          ref={meshRef}
+          args={[0.6, 0.18, 16, 64]} 
           position={position}
           scale={targetScale}
           onPointerOver={handlePointerOver}
@@ -104,7 +108,7 @@ const InteractiveShape: React.FC<InteractiveShapeProps> = ({ position, color, ty
 
       {type === 'octahedron' && (
         <Octahedron 
-          ref={meshRef as any}
+          ref={meshRef}
           args={[0.8, 0]} 
           position={position}
           scale={targetScale}
@@ -117,12 +121,12 @@ const InteractiveShape: React.FC<InteractiveShapeProps> = ({ position, color, ty
             wireframe={active}
             metalness={active ? 0 : 0.9}
             roughness={0.1}
-            emissive={active ? '#ffffff' : '#000000'}
+            emissive={new THREE.Color(active ? '#ffffff' : '#000000')}
             emissiveIntensity={active ? 1 : 0}
           />
         </Octahedron>
       )}
-    </group>
+    </Float>
   );
 };
 
