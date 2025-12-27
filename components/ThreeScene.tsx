@@ -29,7 +29,6 @@ const InteractiveShape: React.FC<InteractiveShapeProps> = ({ position, color, ty
   useFrame((state) => {
     if (meshRef.current) {
       const t = state.clock.getElapsedTime();
-      // Constant rotation
       meshRef.current.rotation.x = Math.cos(t / 4) / 2;
       meshRef.current.rotation.y = Math.sin(t / 4) / 2;
       meshRef.current.rotation.z += active ? 0.05 : 0.005;
@@ -52,7 +51,6 @@ const InteractiveShape: React.FC<InteractiveShapeProps> = ({ position, color, ty
     setActive(!active);
   };
 
-  // Base scale modified by states
   const targetScale = (hovered ? 1.2 : 1) * (active ? 1.4 : 1) * scale;
 
   return (
@@ -71,7 +69,6 @@ const InteractiveShape: React.FC<InteractiveShapeProps> = ({ position, color, ty
           onPointerOut={handlePointerOut}
           onClick={handleClick}
         >
-          {/* Gradient-like effect using high-reflectivity and state-based color shifts */}
           <MeshDistortMaterial
             color={active ? '#f59e0b' : (hovered ? '#818cf8' : color)}
             speed={active ? 5 : 2}
@@ -95,7 +92,6 @@ const InteractiveShape: React.FC<InteractiveShapeProps> = ({ position, color, ty
           onPointerOut={handlePointerOut}
           onClick={handleClick}
         >
-          {/* Dynamic MeshWobbleMaterial with varying speed and factor */}
           <MeshWobbleMaterial 
             color={active ? '#10b981' : (hovered ? '#f43f5e' : color)} 
             speed={active ? 8 : (hovered ? 4 : 1)} 
@@ -116,7 +112,6 @@ const InteractiveShape: React.FC<InteractiveShapeProps> = ({ position, color, ty
           onPointerOut={handlePointerOut}
           onClick={handleClick}
         >
-          {/* Standard material that switches to wireframe when active */}
           <meshStandardMaterial 
             color={active ? '#ffffff' : (hovered ? '#ec4899' : color)} 
             wireframe={active}
@@ -136,7 +131,6 @@ const SceneContent: React.FC = () => {
 
   useFrame((state) => {
     if (groupRef.current) {
-      // Gentle mouse tracking
       groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, (state.mouse.x * Math.PI) / 10, 0.05);
       groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, (-state.mouse.y * Math.PI) / 10, 0.05);
     }
@@ -144,22 +138,13 @@ const SceneContent: React.FC = () => {
 
   return (
     <group ref={groupRef}>
-      {/* Central interactive sphere */}
       <InteractiveShape type="sphere" position={[0, 0, 0]} color="#4f46e5" scale={1.2} />
-      
-      {/* Surrounding elements */}
       <InteractiveShape type="torus" position={[3.5, 1.5, -2]} color="#8b5cf6" scale={0.7} />
       <InteractiveShape type="octahedron" position={[-3.5, -1, -1.5]} color="#ec4899" scale={0.6} />
       <InteractiveShape type="torus" position={[-3, 2.5, -3]} color="#6366f1" scale={0.4} />
       <InteractiveShape type="sphere" position={[3, -2, -2.5]} color="#d1d5db" scale={0.3} />
       
-      <ContactShadows 
-        position={[0, -4, 0]} 
-        opacity={0.5} 
-        scale={20} 
-        blur={2.5} 
-        far={5} 
-      />
+      <ContactShadows position={[0, -4, 0]} opacity={0.5} scale={20} blur={2.5} far={5} />
     </group>
   );
 };
